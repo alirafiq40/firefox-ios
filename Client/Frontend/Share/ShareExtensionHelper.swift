@@ -52,9 +52,8 @@ class ShareExtensionHelper: NSObject {
         // This needs to be ready by the time the share menu has been displayed and
         // activityViewController(activityViewController:, activityType:) is called,
         // which is after the user taps the button. So a million cycles away.
-        if ShareExtensionHelper.isPasswordManagerExtensionAvailable() {
-            findLoginExtensionItem()
-        }
+        findLoginExtensionItem()
+
 
         activityViewController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
             if !completed {
@@ -99,19 +98,20 @@ extension ShareExtensionHelper: UIActivityItemSource {
     }
 
     func activityViewController(_ activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: UIActivityType?) -> String {
-        return "public.url"
+        guard let type = activityType else {
+            return "org.appextension.fill-browser-action"
+        }
+
+        if isPasswordManagerActivityType(type.rawValue) {
+            return "org.appextension.fill-browser-action"
+        }
+        return kUTTypeURL as String //same as public.url
     }
 }
 
 private extension ShareExtensionHelper {
-    static func isPasswordManagerExtensionAvailable() -> Bool {
-        return OnePasswordExtension.shared().isAppExtensionAvailable()
-    }
 
     func isPasswordManagerActivityType(_ activityType: String?) -> Bool {
-        if !ShareExtensionHelper.isPasswordManagerExtensionAvailable() {
-            return false
-        }
         // A 'password' substring covers the most cases, such as pwsafe and 1Password.
         // com.agilebits.onepassword-ios.extension
         // com.app77.ios.pwsafe2.find-login-action-password-actionExtension
