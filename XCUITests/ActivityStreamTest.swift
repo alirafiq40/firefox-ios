@@ -195,7 +195,6 @@ class ActivityStreamTest: BaseTestCase {
         TopSiteCellgroup.cells[defaultTopSite["topSiteLabel"]!]
             .press(forDuration: 1)
         selectOptionFromContextMenu(option: "Open in New Private Tab")
-        waitUntilPageLoad()
 
         // Check that two tabs are open and one of them is the default top site one
         navigator.goto(PrivateTabTray)
@@ -330,9 +329,9 @@ class ActivityStreamTest: BaseTestCase {
             navigator.openURL(urlString: "http://cvs.com")
             waitUntilPageLoad()
             waitForValueContains(app.textFields["url"], value: "cvs.com")
-            navigator.openURL(urlString: "http://walmart.com")
+            navigator.openURL(urlString: "http://linkedin.com")
             waitUntilPageLoad()
-            waitForValueContains(app.textFields["url"], value: "walmart.com")
+            waitForValueContains(app.textFields["url"], value: "linkedin.com")
             navigator.openURL(urlString: "http://zara.com")
             waitUntilPageLoad()
             waitForValueContains(app.textFields["url"], value: "zara.com")
